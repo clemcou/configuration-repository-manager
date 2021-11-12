@@ -1,8 +1,24 @@
 package fr.utbm.da50.configurationrepositorymanager.entity;
 
-import javax.persistence.Entity;
+import org.springframework.data.neo4j.core.schema.*;
 
-@Entity
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Node("Propriete")
 public class Propriete {
-    //TODO
+	@Id @GeneratedValue
+	private Long id;
+	@Property("nom")
+	private String nom;
+	@Property("type")
+	private String type;
+	@Property("valeur")
+	private String valeur;	
 }
