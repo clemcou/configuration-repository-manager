@@ -2,11 +2,13 @@ package fr.utbm.da50.configurationrepositorymanager.service;
 
 import fr.utbm.da50.configurationrepositorymanager.entity.Objet;
 import fr.utbm.da50.configurationrepositorymanager.repository.ObjetRepository;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Data
 @Service
 public class ObjetService {
 
@@ -29,13 +31,5 @@ public class ObjetService {
         Objet savedObjet = objetRepository.save(objet);
         return savedObjet;
     }
-
-
-    public ObjetRepository getObjetRepository() {
-        return objetRepository;
-    }
-
-    public void setObjetRepository(ObjetRepository objetRepository) {
-        this.objetRepository = objetRepository;
-    }
+    
 }

@@ -2,11 +2,13 @@ package fr.utbm.da50.configurationrepositorymanager.service;
 
 import fr.utbm.da50.configurationrepositorymanager.entity.Propriete;
 import fr.utbm.da50.configurationrepositorymanager.repository.ProprieteRepository;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Data
 @Service
 public class ProprieteService {
 
@@ -30,11 +32,4 @@ public class ProprieteService {
         return savedObjet;
     }
 
-    public ProprieteRepository getProprieteRepository() {
-        return proprieteRepository;
-    }
-
-    public void setProprieteRepository(ProprieteRepository proprieteRepository) {
-        this.proprieteRepository = proprieteRepository;
-    }
 }

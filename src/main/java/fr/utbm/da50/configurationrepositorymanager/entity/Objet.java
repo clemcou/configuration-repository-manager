@@ -29,7 +29,10 @@ public class Objet {
 	@Property("description")
 	private String description;
 	
+	@Relationship(type = "POSSEDER", direction = Direction.OUTGOING)
+	private Set<Objet> objets = new HashSet<>();
+	
 	@Relationship(type = "AVOIR", direction = Direction.OUTGOING)
-	private Set<Propriete> Proprietes = new HashSet<>();
+	private Set<Propriete> proprietes = new HashSet<>();
 
 }

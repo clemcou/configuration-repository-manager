@@ -27,6 +27,6 @@ public class Configuration {
 	private String nom;
 	
 	@Relationship(type = "CONTENIR", direction = Direction.OUTGOING)
-	private Set<Objet> Objet = new HashSet<>();
+	private Set<Objet> objets = new HashSet<>();
 	
 }

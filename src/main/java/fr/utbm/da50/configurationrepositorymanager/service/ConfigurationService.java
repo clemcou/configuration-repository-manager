@@ -2,12 +2,14 @@ package fr.utbm.da50.configurationrepositorymanager.service;
 
 import fr.utbm.da50.configurationrepositorymanager.entity.Configuration;
 import fr.utbm.da50.configurationrepositorymanager.repository.ConfigurationRepository;
+import lombok.Data;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Data
 @Service
 public class ConfigurationService {
     
@@ -32,15 +34,6 @@ public class ConfigurationService {
     public Configuration saveConfiguration(Configuration configuration) {
         Configuration savedConfiguration = configurationRepository.save(configuration);
         return savedConfiguration;
-    }
-    
-    
-    public ConfigurationRepository getConfigurationRepository() {
-        return configurationRepository;
-    }
-    
-    public void setConfigurationRepository(ConfigurationRepository configurationRepository) {
-        this.configurationRepository = configurationRepository;
     }
     
     //TODO
