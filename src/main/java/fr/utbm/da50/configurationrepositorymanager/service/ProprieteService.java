@@ -1,6 +1,5 @@
 package fr.utbm.da50.configurationrepositorymanager.service;
 
-import fr.utbm.da50.configurationrepositorymanager.entity.Objet;
 import fr.utbm.da50.configurationrepositorymanager.entity.Propriete;
 import fr.utbm.da50.configurationrepositorymanager.repository.ProprieteRepository;
 import lombok.Data;
@@ -26,7 +25,7 @@ public class ProprieteService {
         return proprieteRepository.findAll();
     }
     
-    public Iterable<Objet> getObjetsByNom(String nom){
+    public Iterable<Propriete> getProprietesByNom(String nom){
     	return proprieteRepository.findByNomLike(".*"+nom+".*");
     }
     
