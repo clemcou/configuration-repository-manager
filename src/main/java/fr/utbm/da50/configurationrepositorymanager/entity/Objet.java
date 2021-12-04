@@ -33,6 +33,36 @@ public class Objet {
 	private Set<Objet> objets = new HashSet<>();
 	
 	@Relationship(type = "AVOIR", direction = Direction.OUTGOING)
-	private Set<Propriete> proprietes = new HashSet<>();
+	private HashSet<Propriete> proprietes = new HashSet<>();
+
+	public Objet(String nom, String description) {
+		this.nom = nom;
+		this.description = description;
+	}
+	
+	public Objet(String nom, String description, Set<Objet> objets, HashSet<Propriete> proprietes) {
+		this.nom = nom;
+		this.description = description;
+		this.objets = objets;
+		this.proprietes = proprietes;
+	}
+
+	public Objet(String nom, String description, HashSet<Propriete> proprietes) {
+		this.nom = nom;
+		this.description = description;
+		this.proprietes = proprietes;
+	}
+
+	public Objet(String nom, String description, Set<Objet> objets) {
+		this.nom = nom;
+		this.description = description;
+		this.objets = objets;
+	}
+
+	public Objet(String nom) {
+		this.nom = nom;
+	}
+	
+	
 
 }
