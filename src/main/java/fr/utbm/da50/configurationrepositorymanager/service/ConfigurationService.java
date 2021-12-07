@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Data
@@ -41,6 +43,46 @@ public class ConfigurationService {
     public Iterable<Objet> getObjetsOfConfig(final Long id){
     	Optional<Configuration> confOpt = configurationRepository.findById(id);
     	return confOpt.isPresent() ? confOpt.get().getObjets() : null;
+    }
+    /*
+    public Iterable<Configuration> getConfigurationsOrderById(){
+    	return configurationRepository.findAllByOrderById();
+    }
+    */
+    public Iterable<Configuration> getConfigurationsOrderByNomAsc(){
+    	return configurationRepository.findAllByOrderByNomAsc();
+    }
+    
+    public Iterable<Configuration> getConfigurationsOrderByNomDesc(){
+    	return configurationRepository.findAllByOrderByNomDesc();
+    }
+    /*
+     * order by id may not be used by user
+    public List<Objet> getObjetsOrderByIdDesc(final Long id){
+    	return int2ObjetList(configurationRepository.findObjetsOrderByIdDesc(id));
+    }
+    
+    public List<Objet> getObjetsOrderByIdAsc(final Long id){
+    	return int2ObjetList(configurationRepository.findObjetsOrderByIdAsc(id));
+    }
+    */
+    public List<Objet> getObjetsOrderByNomDesc(final Long id){
+    	return int2ObjetList(configurationRepository.findObjetsOrderByNomDesc(id));
+    }
+    
+    public List<Objet> getObjetsOrderByNomAsc(final Long id){
+    	return int2ObjetList(configurationRepository.findObjetsOrderByNomAsc(id));
+    }
+    
+    public List<Objet> int2ObjetList(Iterable<Integer> idSet){
+    	List<Objet> objetList = new ArrayList<Objet>();
+    	for(Integer i : idSet) {
+    		Optional<Objet> objetOpt = objetService.getObjet((long)i);
+    		if(objetOpt.isPresent()) {
+    			objetList.add(objetOpt.get());
+    		}
+    	}
+    	return objetList;
     }
     
     //DELETE

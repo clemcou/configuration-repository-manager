@@ -14,14 +14,27 @@ public interface ConfigurationRepository extends Neo4jRepository<Configuration, 
 	
 	@Query("match(n)-[*0..]->(x) where id(n)=$toId detach delete n,x")
 	void deleteAllRelatedEntity(@Param(value = "toId") long toId);
-	/*
-	@Query(MATCH (n) WHERE n.nom CONTAINS 'test' RETURN n)
-	void findByNameLike()
-	
-	@Query("MATCH (n) WHERE n.name =~ ('.*'+$name+'.*') RETURN n")
-    List<BaseNode> findBaseNodeByNameLike(@Param("name") String name);
-    */
+
 	Iterable<Configuration> findByNomLike(String nom);
+	
+	//Iterable<Configuration> findAllByOrderById();
+	
+	Iterable<Configuration> findAllByOrderByNomAsc();
+	
+	Iterable<Configuration> findAllByOrderByNomDesc();
+	/*
+	@Query("match(n:Configuration)-[CONTENIR]->(enf) where id(n)=$configId return id(enf) order by id(enf) DESC")
+	Iterable<Integer> findObjetsOrderByIdDesc(@Param(value = "configId") long configId);
+	
+	@Query("match(n:Configuration)-[CONTENIR]->(enf) where id(n)=$configId return id(enf) order by id(enf)")
+	Iterable<Integer> findObjetsOrderByIdAsc(@Param(value = "configId") long configId);
+	*/
+	@Query("match(n:Configuration)-[CONTENIR]->(enf) where id(n)=$configId return id(enf) order by enf.nom DESC")
+	Iterable<Integer> findObjetsOrderByNomDesc(@Param(value = "configId") long configId);
+	
+	@Query("match(n:Configuration)-[CONTENIR]->(enf) where id(n)=$configId return id(enf) order by enf.nom")
+	Iterable<Integer> findObjetsOrderByNomAsc(@Param(value = "configId") long configId);
+
 }
 
 

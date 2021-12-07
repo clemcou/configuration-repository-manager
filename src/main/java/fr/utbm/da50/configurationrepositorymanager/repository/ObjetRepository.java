@@ -15,4 +15,28 @@ public interface ObjetRepository extends Neo4jRepository<Objet, Long> {
 	void deleteAllRelatedEntity(@Param(value = "toId") long toId);
 
 	Iterable<Objet> findByNomLike(String nom);
+	/*
+	@Query("match(n:Objet)-[AVOIR]->(enf) where id(n)=$objetId return id(enf) order by id(enf) DESC")
+	Iterable<Integer> findProprietesOrderByIdDesc(@Param(value = "objetId") long objetId);
+	
+	@Query("match(n:Objet)-[AVOIR]->(enf) where id(n)=$objetId return id(enf) order by id(enf)")
+	Iterable<Integer> findProprietesOrderByIdAsc(@Param(value = "objetId") long objetId);
+	*/
+	@Query("match(n:Objet)-[AVOIR]->(enf) where id(n)=$objetId return id(enf) order by enf.nom DESC")
+	Iterable<Integer> findProprietesOrderByNomDesc(@Param(value = "objetId") long objetId);
+	
+	@Query("match(n:Objet)-[AVOIR]->(enf) where id(n)=$objetId return id(enf) order by enf.nom")
+	Iterable<Integer> findProprietesOrderByNomAsc(@Param(value = "objetId") long objetId);
+	/*
+	@Query("match(n:Objet)-[POSSEDER]->(enf) where id(n)=$objetId return id(enf) order by id(enf) DESC")
+	Iterable<Integer> findObjetsOrderByIdDesc(@Param(value = "objetId") long objetId);
+	
+	@Query("match(n:Objet)-[POSSEDER]->(enf) where id(n)=$objetId return id(enf) order by id(enf)")
+	Iterable<Integer> findObjetsOrderByIdAsc(@Param(value = "objetId") long objetId);
+	*/
+	@Query("match(n:Objet)-[POSSEDER]->(enf) where id(n)=$objetId return id(enf) order by enf.nom DESC")
+	Iterable<Integer> findObjetsOrderByNomDesc(@Param(value = "objetId") long objetId);
+	
+	@Query("match(n:Objet)-[POSSEDER]->(enf) where id(n)=$objetId return id(enf) order by enf.nom")
+	Iterable<Integer> findObjetsOrderByNomAsc(@Param(value = "objetId") long objetId);
 }

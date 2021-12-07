@@ -173,6 +173,34 @@ class ConfigurationRepositoryManagerApplicationTests {
     	}
     	
     	System.out.println(conServ.getConfiguration(144L).get().getObjets().size() );
+    	
+    	List<Propriete> pList = objServ.getProprietesOrderByIdDesc(33L);
+    	for(Propriete i : pList) {
+    		System.out.println(i.toString());
+    	}
+    	
+    	List<Propriete> pList1 = objServ.getProprietesOrderByIdAsc(33L);
+    	for(Propriete i : pList1) {
+    		System.out.println(i.toString());
+    	}
+    	
+    	List<Propriete> pList2 = objServ.getProprietesOrderByNomAsc(33L);
+    	for(Propriete i : pList2) {
+    		System.out.println(i.toString());
+    	}
+    	for(Propriete i : objServ.getProprietesOrderByNomDesc(33L)) {
+    		System.out.println(i.toString());
+    	}
+    	for(Objet i : objServ.getObjetsOrderByIdDesc(25L)) {
+    		System.out.println(i.toString());
+    	}
+    	for(Objet i : conServ.getObjetsOrderByIdAsc(2L)) {
+    		System.out.println(i.toString());
+    	}
     	*/
+    	
+    	for(Configuration c : conServ.getConfigurationsOrderByNomDesc()) {
+    		System.out.println(c.toString());
+    	}
     }
 }
