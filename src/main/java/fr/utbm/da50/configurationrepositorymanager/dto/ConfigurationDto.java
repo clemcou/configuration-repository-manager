@@ -10,6 +10,7 @@ public class ConfigurationDto {
     private Long id;
     private String nom;
     private String description;
+
     private boolean isReferentiel;
     private Set<ObjetDto> objets;
 

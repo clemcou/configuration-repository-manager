@@ -27,10 +27,7 @@ public class Configuration {
 	private String nom;
 	@Property("description")
 	private String description;
-	
-	@Property("description")
-	private String description;
-	
+
 	@Relationship(type = "CONTENIR", direction = Direction.OUTGOING)
 	private Set<Objet> objets = new HashSet<>();
 

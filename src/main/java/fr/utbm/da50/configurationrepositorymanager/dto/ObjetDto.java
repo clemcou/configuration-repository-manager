@@ -12,6 +12,7 @@ public class ObjetDto {
     private String description;
     private ObjetDto objetParent;
     private Set<ObjetDto> objetsEnfants;
+    private Set<ProprieteDto> proprietes;
     
     public ObjetDto(){
     
