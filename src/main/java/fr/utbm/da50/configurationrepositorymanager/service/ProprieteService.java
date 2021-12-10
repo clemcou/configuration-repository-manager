@@ -14,6 +14,8 @@ public class ProprieteService {
 
     @Autowired
     private ProprieteRepository proprieteRepository;
+    
+    // READ
 
     public Optional<Propriete> getPropriete(final Long id) {
         return proprieteRepository.findById(id);
@@ -22,14 +24,51 @@ public class ProprieteService {
     public Iterable<Propriete> getProprietes() {
         return proprieteRepository.findAll();
     }
+    
+    public Iterable<Propriete> getProprietesByNom(String nom){
+    	return proprieteRepository.findByNomLike(".*"+nom+".*");
+    }
+    
+    //DELETE
 
     public void deletePropriete(final Long id) {
         proprieteRepository.deleteById(id);
     }
+    
+    //CREATE
 
     public Propriete savePropriete(Propriete propriete) {
         Propriete savedObjet = proprieteRepository.save(propriete);
         return savedObjet;
     }
+    
+    //UPDATE
+    
+    public void updatePropNom(final Long id, String nom) {
+    	Optional<Propriete> proprieteOpt = proprieteRepository.findById(id);
+    	if(proprieteOpt.isPresent()){
+    		Propriete propriete = proprieteOpt.get();
+    		propriete.setNom(nom);
+    		proprieteRepository.save(propriete);
+    	}
+	}
+    
+    public void updatePropType(final Long id, String type) {
+    	Optional<Propriete> proprieteOpt = proprieteRepository.findById(id);
+    	if(proprieteOpt.isPresent()){
+    		Propriete propriete = proprieteOpt.get();
+    		propriete.setType(type);
+    		proprieteRepository.save(propriete);
+    	}
+	}
+    
+    public void updatePropValeur(final Long id, String valeur) {
+    	Optional<Propriete> proprieteOpt = proprieteRepository.findById(id);
+    	if(proprieteOpt.isPresent()){
+    		Propriete propriete = proprieteOpt.get();
+    		propriete.setValeur(valeur);
+    		proprieteRepository.save(propriete);
+    	}
+	}
 
 }

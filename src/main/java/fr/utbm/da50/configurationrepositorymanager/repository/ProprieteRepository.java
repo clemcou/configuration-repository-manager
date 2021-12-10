@@ -9,5 +9,7 @@ import org.springframework.stereotype.Repository;
 @Qualifier("ProprieteRepository")
 public interface ProprieteRepository extends Neo4jRepository<Propriete, Long> {
 
+	Iterable<Propriete> findByNomLike(String nom);
+
 
 }

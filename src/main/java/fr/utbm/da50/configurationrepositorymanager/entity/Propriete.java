@@ -20,5 +20,13 @@ public class Propriete {
 	@Property("type")
 	private String type;
 	@Property("valeur")
-	private String valeur;	
+	private String valeur;
+	
+	public Propriete(String nom, String type, String valeur) {
+		super();
+		this.nom = nom;
+		this.type = type;
+		this.valeur = valeur;
+	}	
+	
 }
