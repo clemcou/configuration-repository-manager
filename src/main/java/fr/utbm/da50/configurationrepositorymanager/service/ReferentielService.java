@@ -87,9 +87,7 @@ public class ReferentielService {
         List<Objet> objetList = new ArrayList<Objet>();
         for (Integer i : idSet) {
             Optional<Objet> objetOpt = objetService.getObjet((long) i);
-            if (objetOpt.isPresent()) {
-                objetList.add(objetOpt.get());
-            }
+            objetOpt.ifPresent(objetList::add);
         }
         return objetList;
     }

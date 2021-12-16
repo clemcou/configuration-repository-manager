@@ -201,6 +201,54 @@ public class ConfigurationManager {
      * 
      */
 
+    // get all objets from a referentiel
+    @GetMapping("/referentiel/{id}/objets")
+    public List<ObjetDto> getAllObjetsFromReferentiel(@PathVariable Long id){
+        Iterable<Objet> objets = referentielService.getObjetsOfReferentiel(id);
+
+        //Iterable<> to List<>
+        List<Objet> result = new ArrayList<Objet>();
+        for (Objet o : objets) {
+            result.add(o);
+        }
+
+        return result.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    // get all objets from a configuration
+    @GetMapping("/configuration/{id}/objets")
+    public List<ObjetDto> getAllObjetsFromConfiguration(@PathVariable Long id){
+        Iterable<Objet> objets = configurationService.getObjetsOfConfig(id);
+
+        //Iterable<> to List<>
+        List<Objet> result = new ArrayList<Objet>();
+        for (Objet o : objets) {
+            result.add(o);
+        }
+
+        return result.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    // get all objets from a objet
+    @GetMapping("/objet/{id}/objets")
+    public List<ObjetDto> getAllObjetsFromObjet(@PathVariable Long id){
+        Iterable<Objet> objets = objetService.getObjetsOfObjet(id);
+
+        //Iterable<> to List<>
+        List<Objet> result = new ArrayList<Objet>();
+        for (Objet o : objets) {
+            result.add(o);
+        }
+
+        return result.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     // create objet and link it to an objet
     @PostMapping("/objet/{id}/objet")
     public ObjetDto createObjetInObjet(@PathVariable Long id, @RequestBody ObjetDto objetDto) {
