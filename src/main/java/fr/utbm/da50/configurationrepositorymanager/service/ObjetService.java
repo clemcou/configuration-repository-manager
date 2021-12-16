@@ -117,11 +117,18 @@ public class ObjetService {
 	//CREATE
 	
     public Objet saveObjet(Objet objet) {
-        Objet savedObjet = objetRepository.save(objet);
-        return savedObjet;
+		return objetRepository.save(objet);
     }
     
     //UPDATE
+
+	public void updateObjet(final Long id, Objet objet) {
+		if(objetRepository.findById(id).isPresent()){
+			objet.setId(id);
+			objetRepository.save(objet);
+		}
+	}
+
     public void updateObjetNom(final Long id, String nom) {
     	Optional<Objet> objetOpt = objetRepository.findById(id);
     	if(objetOpt.isPresent()){

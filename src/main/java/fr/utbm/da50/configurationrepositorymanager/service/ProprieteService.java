@@ -43,7 +43,14 @@ public class ProprieteService {
     }
     
     //UPDATE
-    
+
+	public void updatePropriete(final Long id, Propriete propriete) {
+		if(proprieteRepository.findById(id).isPresent()){
+			propriete.setId(id);
+			proprieteRepository.save(propriete);
+		}
+	}
+
     public void updatePropNom(final Long id, String nom) {
     	Optional<Propriete> proprieteOpt = proprieteRepository.findById(id);
     	if(proprieteOpt.isPresent()){

@@ -102,15 +102,21 @@ public class ConfigurationService {
     //CREATE
     
     public Configuration saveConfiguration(Configuration configuration) {
-        Configuration savedConfiguration = configurationRepository.save(configuration);
-        return savedConfiguration;
+        return configurationRepository.save(configuration);
     }
     
     //UPDATE
+
+    public void updateConfig(final Long id, Configuration configuration) {
+        if(configurationRepository.findById(id).isPresent()){
+            configuration.setId(id);
+            configurationRepository.save(configuration);
+        }
+    }
     
     public void updateConfigNom(final Long id, String name) {
     	Optional<Configuration> confOpt = configurationRepository.findById(id);
-    	if(confOpt.isPresent()){
+    	if(configurationRepository.findById(id).isPresent()){
     		Configuration configuration = confOpt.get();
     		configuration.setNom(name);
     		configurationRepository.save(configuration);

@@ -39,8 +39,7 @@ public class Configuration {
 		this.nom = nom;
 		this.objets = objets;
 	}
-	
-	
+
 	public Configuration(String nom, String description) {
 		this.nom = nom;
 		this.description = description;
