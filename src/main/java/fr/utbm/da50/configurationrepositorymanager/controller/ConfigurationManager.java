@@ -74,9 +74,13 @@ public class ConfigurationManager {
     }
 
     // update referentiel
-    @PutMapping("/referentiel/{id}")
-    public void updateReferentiel(@PathVariable Long id, @RequestBody ReferentielDto referentielDto){
-        Referentiel referentiel = convertToEntity(referentielDto);
+    @PatchMapping("/referentiel/{id}")
+    public void updateReferentiel(@PathVariable Long id, @RequestBody Map<String, Object> patchValues){
+        Referentiel ref = referentielService.getReferentiel(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Referentiel not exist with id :" + id));
+        ReferentielDto dto = modelMapper.map(ref, ReferentielDto.class);
+        modelMapper.map(patchValues, dto);
+        Referentiel referentiel = convertToEntity(dto);
         referentielService.updateReferentiel(id, referentiel);
     }
 
@@ -123,9 +127,13 @@ public class ConfigurationManager {
     }
 
     // update configuration
-    @PutMapping("/configuration/{id}")
-    public void updateConfiguration(@PathVariable Long id, @RequestBody ConfigurationDto configurationDto){
-        Configuration configuration = convertToEntity(configurationDto);
+    @PatchMapping("/configuration/{id}")
+    public void updateConfiguration(@PathVariable Long id, @RequestBody Map<String, Object> patchValues){
+        Configuration conf = configurationService.getConfiguration(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Configuration not exist with id :" + id));
+        ConfigurationDto dto = modelMapper.map(conf, ConfigurationDto.class);
+        modelMapper.map(patchValues, dto);
+        Configuration configuration = convertToEntity(dto);
         configurationService.updateConfig(id, configuration);
     }
 
@@ -302,9 +310,13 @@ public class ConfigurationManager {
     }
 
     // update objet
-    @PutMapping("/objet/{id}")
-    public void updateObjet(@PathVariable Long id, @RequestBody ObjetDto objetDto){
-        Objet objet = convertToEntity(objetDto);
+    @PatchMapping("/objet/{id}")
+    public void updateObjet(@PathVariable Long id, @RequestBody Map<String, Object> patchValues){
+        Objet obj = objetService.getObjet(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Objet not exist with id :" + id));
+        ObjetDto dto = modelMapper.map(obj, ObjetDto.class);
+        modelMapper.map(patchValues, dto);
+        Objet objet = convertToEntity(dto);
         objetService.updateObjet(id, objet);
     }
 
@@ -350,9 +362,13 @@ public class ConfigurationManager {
     }
 
     // update propriete
-    @PutMapping("/propriete/{id}")
-    public void updatePropriete(@PathVariable Long id, @RequestBody ProprieteDto proprieteDto){
-        Propriete propriete = convertToEntity(proprieteDto);
+    @PatchMapping("/propriete/{id}")
+    public void updatePropriete(@PathVariable Long id, @RequestBody Map<String, Object> patchValues){
+        Propriete prop = proprieteService.getPropriete(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Propriete not exist with id :" + id));
+        ProprieteDto dto = modelMapper.map(prop, ProprieteDto.class);
+        modelMapper.map(patchValues, dto);
+        Propriete propriete = convertToEntity(dto);
         proprieteService.updatePropriete(id, propriete);
     }
 
