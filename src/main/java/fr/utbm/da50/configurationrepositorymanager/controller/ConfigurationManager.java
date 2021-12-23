@@ -78,7 +78,7 @@ public class ConfigurationManager {
     public void updateReferentiel(@PathVariable Long id, @RequestBody Map<String, Object> patchValues){
         Referentiel ref = referentielService.getReferentiel(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Referentiel not exist with id :" + id));
-        ReferentielDto dto = modelMapper.map(ref, ReferentielDto.class);
+        ReferentielDto dto = convertToDto(ref);
         modelMapper.map(patchValues, dto);
         Referentiel referentiel = convertToEntity(dto);
         referentielService.updateReferentiel(id, referentiel);
@@ -131,7 +131,7 @@ public class ConfigurationManager {
     public void updateConfiguration(@PathVariable Long id, @RequestBody Map<String, Object> patchValues){
         Configuration conf = configurationService.getConfiguration(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Configuration not exist with id :" + id));
-        ConfigurationDto dto = modelMapper.map(conf, ConfigurationDto.class);
+        ConfigurationDto dto = convertToDto(conf);
         modelMapper.map(patchValues, dto);
         Configuration configuration = convertToEntity(dto);
         configurationService.updateConfig(id, configuration);
@@ -314,7 +314,7 @@ public class ConfigurationManager {
     public void updateObjet(@PathVariable Long id, @RequestBody Map<String, Object> patchValues){
         Objet obj = objetService.getObjet(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Objet not exist with id :" + id));
-        ObjetDto dto = modelMapper.map(obj, ObjetDto.class);
+        ObjetDto dto = convertToDto(obj);
         modelMapper.map(patchValues, dto);
         Objet objet = convertToEntity(dto);
         objetService.updateObjet(id, objet);
@@ -366,7 +366,7 @@ public class ConfigurationManager {
     public void updatePropriete(@PathVariable Long id, @RequestBody Map<String, Object> patchValues){
         Propriete prop = proprieteService.getPropriete(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Propriete not exist with id :" + id));
-        ProprieteDto dto = modelMapper.map(prop, ProprieteDto.class);
+        ProprieteDto dto = convertToDto(prop);
         modelMapper.map(patchValues, dto);
         Propriete propriete = convertToEntity(dto);
         proprieteService.updatePropriete(id, propriete);
