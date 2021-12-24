@@ -391,19 +391,19 @@ public class ConfigurationManager {
     private ReferentielDto convertToDto(Referentiel r) {
         ReferentielDto referentielDto = modelMapper.map(r, ReferentielDto.class);
 
-        if(r.getObjets() != null)
+/*        if(r.getObjets() != null)
         {
             for(Objet o : r.getObjets()){
                 referentielDto.getObjets().add(convertToDto(o));
             }
-        }
+        }*/
 
-        if(r.getConfigurations() != null)
+/*        if(r.getConfigurations() != null)
         {
             for(Configuration c : r.getConfigurations()){
                 referentielDto.getConfigurations().add(convertToDto(c));
             }
-        }
+        }*/
 
         return referentielDto;
     }
