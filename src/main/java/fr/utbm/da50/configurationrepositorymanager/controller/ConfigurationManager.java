@@ -1,20 +1,13 @@
 package fr.utbm.da50.configurationrepositorymanager.controller;
 
 import fr.utbm.da50.configurationrepositorymanager.dto.ConfigurationDto;
-import fr.utbm.da50.configurationrepositorymanager.dto.ObjetDto;
-import fr.utbm.da50.configurationrepositorymanager.dto.ProprieteDto;
-import fr.utbm.da50.configurationrepositorymanager.dto.ReferentielDto;
 import fr.utbm.da50.configurationrepositorymanager.entity.Configuration;
 import fr.utbm.da50.configurationrepositorymanager.entity.Objet;
-import fr.utbm.da50.configurationrepositorymanager.entity.Propriete;
 import fr.utbm.da50.configurationrepositorymanager.entity.Referentiel;
 import fr.utbm.da50.configurationrepositorymanager.exception.ResourceNotFoundException;
 import fr.utbm.da50.configurationrepositorymanager.service.ConfigurationService;
-import fr.utbm.da50.configurationrepositorymanager.service.ObjetService;
-import fr.utbm.da50.configurationrepositorymanager.service.ProprieteService;
 import fr.utbm.da50.configurationrepositorymanager.service.ReferentielService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -25,69 +18,22 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/")
 public class ConfigurationManager {
 
-    @Autowired
-    private ReferentielService referentielService;
-    @Autowired
-    private ConfigurationService configurationService;
-    @Autowired
-    private ObjetService objetService;
-    @Autowired
-    private ProprieteService proprieteService;
-     
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ReferentielService referentielService;
+    private final ConfigurationService configurationService;
 
-    /*
-     *  REFERENTIEL API REST
-     *
-     */
+    private final ModelMapper modelMapper;
 
-    // get all referentiels
-    @GetMapping("/referentiels")
-    public List<ReferentielDto> getAllReferentiels(){
-        Iterable<Referentiel> referentiels = referentielService.getReferentiels();
+    private final ObjetManager objetManager;
 
-        //Iterable<> to List<>
-        List<Referentiel> result = new ArrayList<Referentiel>();
-        for (Referentiel c : referentiels) {
-            result.add(c);
-        }
-
-        return result.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    // create referentiel
-    @PostMapping("/referentiel")
-    public ReferentielDto createReferentiel(@RequestBody ReferentielDto referentielDto) {
-        Referentiel referentiel = convertToEntity(referentielDto);
-        Referentiel referentielCreated = referentielService.saveReferentiel(referentiel);
-        return convertToDto(referentielCreated);
-    }
-
-    // get referentiel by id
-    @GetMapping("/referentiel/{id}")
-    public ReferentielDto getReferentielById(@PathVariable Long id) {
-        return convertToDto(referentielService.getReferentiel(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Referentiel not exist with id :" + id)));
-    }
-
-    // update referentiel
-    @PatchMapping("/referentiel/{id}")
-    public void updateReferentiel(@PathVariable Long id, @RequestBody Map<String, Object> patchValues){
-        Referentiel ref = referentielService.getReferentiel(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Referentiel not exist with id :" + id));
-        ReferentielDto dto = convertToDto(ref);
-        modelMapper.map(patchValues, dto);
-        Referentiel referentiel = convertToEntity(dto);
-        referentielService.updateReferentiel(id, referentiel);
-    }
-
-    // delete referentiel
-    @DeleteMapping("/referentiel/{id}")
-    public void deleteReferentiel(@PathVariable Long id){
-        referentielService.deleteWithAllRelatedObjets(id);
+    public ConfigurationManager(ReferentielService referentielService, ConfigurationService configurationService, ObjetManager objetManager, ModelMapper modelMapper) {
+        Objects.requireNonNull(referentielService);
+        Objects.requireNonNull(configurationService);
+        Objects.requireNonNull(modelMapper);
+        Objects.requireNonNull(objetManager);
+        this.referentielService = referentielService;
+        this.configurationService = configurationService;
+        this.modelMapper = modelMapper;
+        this.objetManager = objetManager;
     }
 
     /*
@@ -191,7 +137,7 @@ public class ConfigurationManager {
         return convertToDto(configurationCreated);
     }*/
 
-    // get configuration by id of regerentiel and configuration
+    // get configuration by id of referentiel and configuration
     @GetMapping("/referentiel/{refId}/configuration/{confId}")
     public ConfigurationDto getConfigurationByIds(@PathVariable Long refId, @PathVariable Long confId) {
         Referentiel ref = referentielService.getReferentiel(refId)
@@ -205,276 +151,26 @@ public class ConfigurationManager {
     }
 
     /*
-     *  OBJET API REST
-     * 
-     */
-
-    // get all objets from a referentiel
-    @GetMapping("/referentiel/{id}/objets")
-    public List<ObjetDto> getAllObjetsFromReferentiel(@PathVariable Long id){
-        Iterable<Objet> objets = referentielService.getObjetsOfReferentiel(id);
-
-        //Iterable<> to List<>
-        List<Objet> result = new ArrayList<Objet>();
-        for (Objet o : objets) {
-            result.add(o);
-        }
-
-        return result.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    // get all objets from a configuration
-    @GetMapping("/configuration/{id}/objets")
-    public List<ObjetDto> getAllObjetsFromConfiguration(@PathVariable Long id){
-        Iterable<Objet> objets = configurationService.getObjetsOfConfig(id);
-
-        //Iterable<> to List<>
-        List<Objet> result = new ArrayList<Objet>();
-        for (Objet o : objets) {
-            result.add(o);
-        }
-
-        return result.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    // get all objets from a objet
-    @GetMapping("/objet/{id}/objets")
-    public List<ObjetDto> getAllObjetsFromObjet(@PathVariable Long id){
-        Iterable<Objet> objets = objetService.getObjetsOfObjet(id);
-
-        //Iterable<> to List<>
-        List<Objet> result = new ArrayList<Objet>();
-        for (Objet o : objets) {
-            result.add(o);
-        }
-
-        return result.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    // create objet and link it to an objet
-    @PostMapping("/objet/{id}/objet")
-    public ObjetDto createObjetInObjet(@PathVariable Long id, @RequestBody ObjetDto objetDto) {
-        Objet objParent = objetService.getObjet(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Objet not exist with id :" + id));
-
-        Objet objet = convertToEntity(objetDto);
-        Objet objetCreated = objetService.saveObjet(objet);
-
-        objParent.getObjets().add(objetCreated);
-        objetService.saveObjet(objParent);
-
-        return convertToDto(objetCreated);
-    }
-
-    // create objet and link it to a referentiel
-    @PostMapping("/referentiel/{id}/objet")
-    public ObjetDto createObjetInReferentiel(@PathVariable Long id, @RequestBody ObjetDto objetDto) {
-        Referentiel ref = referentielService.getReferentiel(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Referentiel not exist with id :" + id));
-
-        Objet objet = convertToEntity(objetDto);
-        Objet objetCreated = objetService.saveObjet(objet);
-
-        ref.getObjets().add(objetCreated);
-        referentielService.saveReferentiel(ref);
-
-        return convertToDto(objetCreated);
-    }
-
-    // create objet and link it to a configuration
-    @PostMapping("/configuration/{id}/objet")
-    public ObjetDto createObjetInConfig(@PathVariable Long id, @RequestBody ObjetDto objetDto) {
-        Configuration configParent = configurationService.getConfiguration(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Configuration not exist with id :" + id));
-
-        Objet objet = convertToEntity(objetDto);
-        Objet objetCreated = objetService.saveObjet(objet);
-
-        configParent.getObjets().add(objetCreated);
-        configurationService.saveConfiguration(configParent);
-
-        return convertToDto(objetCreated);
-    }
-
-    // get object by id
-    @GetMapping("/objet/{id}")
-    public ObjetDto getObjetById(@PathVariable Long id) {
-        return convertToDto(objetService.getObjet(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Objet not exist with id :" + id)));
-    }
-
-    // update objet
-    @PatchMapping("/objet/{id}")
-    public void updateObjet(@PathVariable Long id, @RequestBody Map<String, Object> patchValues){
-        Objet obj = objetService.getObjet(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Objet not exist with id :" + id));
-        ObjetDto dto = convertToDto(obj);
-        modelMapper.map(patchValues, dto);
-        Objet objet = convertToEntity(dto);
-        objetService.updateObjet(id, objet);
-    }
-
-    // delete objet
-    @DeleteMapping("/objet/{id}")
-    public void deleteObjet(@PathVariable Long id){
-        objetService.deleteWithAllRelatedEntity(id);
-    }
-
-    /*
-     *  PROPRIETE API REST
-     * 
-     */
-
-    // create propriete
-    @PostMapping("/propriete")
-    public ProprieteDto createPropriete(@RequestBody ProprieteDto proprieteDto) {
-        Propriete propriete = convertToEntity(proprieteDto);
-        Propriete proprieteCreated = proprieteService.savePropriete(propriete);
-        return convertToDto(proprieteCreated);
-    }
-
-    // create propriete and link it to an objet
-    @PostMapping("/objet/{id}/propriete")
-    public ProprieteDto createProprieteInObjet(@PathVariable Long id, @RequestBody ProprieteDto proprieteDto) {
-        Objet objParent = objetService.getObjet(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Objet not exist with id :" + id));
-
-        Propriete propriete = convertToEntity(proprieteDto);
-        Propriete proprieteCreated = proprieteService.savePropriete(propriete);
-
-        objParent.getProprietes().add(proprieteCreated);
-        objetService.saveObjet(objParent);
-
-        return convertToDto(proprieteCreated);
-    }
-
-    // get propriete by id
-    @GetMapping("/propriete/{id}")
-    public ProprieteDto getProprieteById(@PathVariable Long id) {
-        return convertToDto(proprieteService.getPropriete(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Propriete not exist with id :" + id)));
-    }
-
-    // update propriete
-    @PatchMapping("/propriete/{id}")
-    public void updatePropriete(@PathVariable Long id, @RequestBody Map<String, Object> patchValues){
-        Propriete prop = proprieteService.getPropriete(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Propriete not exist with id :" + id));
-        ProprieteDto dto = convertToDto(prop);
-        modelMapper.map(patchValues, dto);
-        Propriete propriete = convertToEntity(dto);
-        proprieteService.updatePropriete(id, propriete);
-    }
-
-    // delete propriete
-    @DeleteMapping("/propriete/{id}")
-    public void deletePropriete(@PathVariable Long id){
-        proprieteService.deletePropriete(id);
-    }
-
-
-
-    /*
      *  DTO CONVERSIONS
      *
      */
-
-
-    // Referentiel
-
-    private ReferentielDto convertToDto(Referentiel r) {
-        ReferentielDto referentielDto = modelMapper.map(r, ReferentielDto.class);
-
-/*        if(r.getObjets() != null)
-        {
-            for(Objet o : r.getObjets()){
-                referentielDto.getObjets().add(convertToDto(o));
-            }
-        }*/
-
-/*        if(r.getConfigurations() != null)
-        {
-            for(Configuration c : r.getConfigurations()){
-                referentielDto.getConfigurations().add(convertToDto(c));
-            }
-        }*/
-
-        return referentielDto;
-    }
-
-    private Referentiel convertToEntity(ReferentielDto referentielDto) {
-        return modelMapper.map(referentielDto, Referentiel.class);
-    }
 
     // Configuration
 
     private ConfigurationDto convertToDto(Configuration c) {
         ConfigurationDto configurationDto = modelMapper.map(c, ConfigurationDto.class);
 
-
-        if(c.getObjets() != null)
+/*        if(c.getObjets() != null)
         {
             for(Objet o : c.getObjets()){
-                configurationDto.getObjets().add(convertToDto(o));
+                configurationDto.getObjets().add(objetManager.convertToDto(o));
             }
-        }
+        }*/
 
         return configurationDto;
     }
     
     private Configuration convertToEntity(ConfigurationDto configurationDto) {
         return modelMapper.map(configurationDto, Configuration.class);
-    }
-
-
-    // Objet
-
-    private ObjetDto convertToDto(Objet o) {
-        ObjetDto objetDto = modelMapper.map(o, ObjetDto.class);
-
-        if(o.getObjets() != null)
-        {
-            for(Objet enfant : o.getObjets()){
-                if(objetDto.getObjetsEnfants() == null){
-                    objetDto.setObjetsEnfants(new HashSet<ObjetDto>());
-                }
-                objetDto.getObjetsEnfants().add(convertToDto(enfant));
-            }
-        }
-
-        return objetDto;
-    }
-
-    private Objet convertToEntity(ObjetDto objetDto) {
-        Objet o = modelMapper.map(objetDto, Objet.class);
-
-        if(objetDto.getObjetsEnfants() != null)
-        {
-            for(ObjetDto enfant : objetDto.getObjetsEnfants()){
-                if(o.getObjets() == null){
-                    o.setObjets(new HashSet<Objet>());
-                }
-                o.getObjets().add(convertToEntity(enfant));
-            }
-        }
-
-        return o;
-    }
-
-
-    // Propriete
-
-    private ProprieteDto convertToDto(Propriete c) {
-        return modelMapper.map(c, ProprieteDto.class);
-    }
-
-    private Propriete convertToEntity(ProprieteDto ProprieteDto) {
-        return modelMapper.map(ProprieteDto, Propriete.class);
     }
 }

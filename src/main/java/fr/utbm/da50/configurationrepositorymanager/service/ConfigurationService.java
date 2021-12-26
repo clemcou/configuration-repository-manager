@@ -5,26 +5,27 @@ import fr.utbm.da50.configurationrepositorymanager.entity.Objet;
 
 import fr.utbm.da50.configurationrepositorymanager.repository.ConfigurationRepository;
 import lombok.Data;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Data
 @Service
 public class ConfigurationService {
     
-    @Autowired
     private ConfigurationRepository configurationRepository;
     
-    @Autowired
-    private ModelMapper modelMapper;
-    
-    @Autowired
     private ObjetService objetService;
+
+    public ConfigurationService(ConfigurationRepository configurationRepository, ObjetService objetService){
+        Objects.requireNonNull(configurationRepository);
+        Objects.requireNonNull(objetService);
+        this.configurationRepository = configurationRepository;
+        this.objetService = objetService;
+    }
     
     //READ
     

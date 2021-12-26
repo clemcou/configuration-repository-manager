@@ -1,19 +1,25 @@
 package fr.utbm.da50.configurationrepositorymanager.service;
 
 import fr.utbm.da50.configurationrepositorymanager.entity.Propriete;
+import fr.utbm.da50.configurationrepositorymanager.repository.ObjetRepository;
 import fr.utbm.da50.configurationrepositorymanager.repository.ProprieteRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Data
 @Service
 public class ProprieteService {
 
-    @Autowired
     private ProprieteRepository proprieteRepository;
+
+	public ProprieteService(ProprieteRepository proprieteRepository){
+		Objects.requireNonNull(proprieteRepository);
+		this.proprieteRepository = proprieteRepository;
+	}
     
     // READ
 

@@ -4,28 +4,28 @@ import fr.utbm.da50.configurationrepositorymanager.entity.Configuration;
 import fr.utbm.da50.configurationrepositorymanager.entity.Objet;
 import fr.utbm.da50.configurationrepositorymanager.entity.Referentiel;
 import fr.utbm.da50.configurationrepositorymanager.repository.ReferentielRepository;
-import fr.utbm.da50.configurationrepositorymanager.service.ObjetService;
 import lombok.Data;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Data
 @Service
 public class ReferentielService {
 
-    @Autowired
     private ReferentielRepository referentielRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
     private ObjetService objetService;
+
+    public ReferentielService(ObjetService objetService, ReferentielRepository referentielRepository){
+        Objects.requireNonNull(objetService);
+        Objects.requireNonNull(referentielRepository);
+        this.objetService = objetService;
+        this.referentielRepository = referentielRepository;
+    }
 
     //READ
 

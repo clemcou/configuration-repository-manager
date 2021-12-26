@@ -4,22 +4,27 @@ import fr.utbm.da50.configurationrepositorymanager.entity.Objet;
 import fr.utbm.da50.configurationrepositorymanager.entity.Propriete;
 import fr.utbm.da50.configurationrepositorymanager.repository.ObjetRepository;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Data
 @Service
 public class ObjetService {
 
-    @Autowired
     private ObjetRepository objetRepository;
     
-    @Autowired
     private ProprieteService proprieteService;
+
+	public ObjetService(ObjetRepository objetRepository, ProprieteService proprieteService){
+		Objects.requireNonNull(objetRepository);
+		Objects.requireNonNull(proprieteService);
+		this.objetRepository = objetRepository;
+		this.proprieteService = proprieteService;
+	}
     
     //READ
     
