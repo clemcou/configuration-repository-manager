@@ -2,8 +2,8 @@ package fr.utbm.da50.configurationrepositorymanager.controller;
 
 import fr.utbm.da50.configurationrepositorymanager.dto.ConfigurationDto;
 import fr.utbm.da50.configurationrepositorymanager.entity.Configuration;
-import fr.utbm.da50.configurationrepositorymanager.entity.Objet;
 import fr.utbm.da50.configurationrepositorymanager.entity.Referentiel;
+import fr.utbm.da50.configurationrepositorymanager.entity.Objet;
 import fr.utbm.da50.configurationrepositorymanager.exception.ResourceNotFoundException;
 import fr.utbm.da50.configurationrepositorymanager.service.ConfigurationService;
 import fr.utbm.da50.configurationrepositorymanager.service.ReferentielService;
@@ -23,17 +23,13 @@ public class ConfigurationManager {
 
     private final ModelMapper modelMapper;
 
-    private final ObjetManager objetManager;
-
-    public ConfigurationManager(ReferentielService referentielService, ConfigurationService configurationService, ObjetManager objetManager, ModelMapper modelMapper) {
+    public ConfigurationManager(ReferentielService referentielService, ConfigurationService configurationService, ModelMapper modelMapper) {
         Objects.requireNonNull(referentielService);
         Objects.requireNonNull(configurationService);
         Objects.requireNonNull(modelMapper);
-        Objects.requireNonNull(objetManager);
         this.referentielService = referentielService;
         this.configurationService = configurationService;
         this.modelMapper = modelMapper;
-        this.objetManager = objetManager;
     }
 
     /*
@@ -112,8 +108,17 @@ public class ConfigurationManager {
                 .orElseThrow(() -> new ResourceNotFoundException("Referentiel not exist with id :" + id));
 
         Configuration configuration = convertToEntity(configurationDto);
+
+        //duplicate objects from the referentiel to the fresh new configuration
+        configuration.setObjets(new HashSet<Objet>());
+        for(Objet o : ref.getObjets()){
+            Objet newObj = new Objet(o.getNom(), o.getDescription(), o.getObjets(), o.getProprietes());
+            configuration.getObjets().add(newObj);
+        }
+
         Configuration configurationCreated = configurationService.saveConfiguration(configuration);
 
+        //link the configuration to the referentiel
         ref.getConfigurations().add(configurationCreated);
         referentielService.saveReferentiel(ref);
 

@@ -43,20 +43,40 @@ public class Objet {
 	public Objet(String nom, String description, Set<Objet> objets, HashSet<Propriete> proprietes) {
 		this.nom = nom;
 		this.description = description;
-		this.objets = objets;
-		this.proprietes = proprietes;
+
+		this.objets = new HashSet<Objet>();
+		for(Objet o : objets){
+			Objet newObj = new Objet(o.getNom(), o.getDescription(), o.getObjets(), o.getProprietes());
+			this.objets.add(newObj);
+		}
+
+		this.proprietes = new HashSet<Propriete>();
+		for(Propriete p : proprietes){
+			Propriete newProp = new Propriete(p.getNom(), p.getType(), p.getValeur());
+			this.proprietes.add(newProp);
+		}
 	}
 
 	public Objet(String nom, String description, HashSet<Propriete> proprietes) {
 		this.nom = nom;
 		this.description = description;
-		this.proprietes = proprietes;
+
+		this.proprietes = new HashSet<Propriete>();
+		for(Propriete p : proprietes){
+			Propriete newProp = new Propriete(p.getNom(), p.getType(), p.getValeur());
+			this.proprietes.add(newProp);
+		}
 	}
 
 	public Objet(String nom, String description, Set<Objet> objets) {
 		this.nom = nom;
 		this.description = description;
-		this.objets = objets;
+
+		this.objets = new HashSet<Objet>();
+		for(Objet o : objets){
+			Objet newObj = new Objet(o.getNom(), o.getDescription(), o.getObjets(), o.getProprietes());
+			this.objets.add(newObj);
+		}
 	}
 
 	public Objet(String nom) {
